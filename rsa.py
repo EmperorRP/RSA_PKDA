@@ -44,11 +44,16 @@ def generate_key_pair():
 
 def encrypt(plain_text, public_key):
     e, n = public_key
-    return [pow(ord(char), e, n) for char in plain_text]
+    if isinstance(plain_text, str):
+        plain_text = plain_text.encode('utf-8')
+    return [pow(b, e, n) for b in plain_text]
+
 
 def decrypt(cipher_text, private_key):
     d, n = private_key
-    return ''.join(chr(pow(char, d, n)) for char in cipher_text)
+    decrypted_bytes = bytes([pow(char, d, n) for char in cipher_text])
+    return decrypted_bytes
+
 
 if __name__ == '__main__':
     public_key, private_key = generate_key_pair()
